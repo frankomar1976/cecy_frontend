@@ -1,35 +1,59 @@
-<!-- <div class="p-fluid">
-    <form [formGroup]="formCecyIn" (ngSubmit)="onSubmit($event)">
-        <div [formGroupName]="">
 
-        </div>
-    </form>
-</div> -->
-
- <h1>cecy Authority</h1> 
-   
- <!-- <cecy-skeleton *ngIf="flagAuthorities" [type]="'table'"></cecy-skeleton>
-   <div class="card" [hidden]="flagAuthorities" ></div>
-     <p-toolbar styleClass="p-mb-4">
-        <ng-template pTemplate="left">
-        
-                <h1>cecy Authority</h1>
-           
-             <button pButton pRipple type="button"
-                     id="btnOpenFormAuthority" label="Crear" class="p-button-success p-button-rounded" icon="pi pi-plus" (click)="openNewFormAuthority()">
-             </button>        
-             <button pButton pRipple type="button"
-                     id="btnOpenDeletes" label="Eliminar" class="p-button-danger p-button-rounded p-ml-2" icon="pi pi-trash" (click)="deleteAuthorities()" [disabled]="!selectedAuthorities">
-             </button>      
-    </ng-template>
-
-    <ng-template pTemplate="right">
-        <button pButton pRipple type="button"
-                     id="btnFresh" label="Actualizar" class="p-button-info p-button-rounded p-ml-2" icon="pi pi-refresh" (click)="deleteAuthorities()" [disabled]="!selectedAuthorities">
-             </button>  
-
-    </ng-template>
-
-     </p-toolbar>
- -->
+ <h1>Crear Autoridades</h1> 
  
+ <table>
+     <thead>
+         <tr>
+             <th>Ïndice</th>
+             <th>Nombre</th>
+             <th>Función</th>
+             <th>Fecha de Inicio</th>
+             <th>Fecha de Finalización</th>
+        </tr>
+     </thead>
+     <tbody>
+         <tr>
+
+         </tr>
+     </tbody>
+ </table>
+   
+ <form autocomplete="off" [formGroup]="formulario" (ngSubmit)="guardar()">
+     <label >
+         Funciones:
+     </label>
+     <div formArrayName="functions">
+         <div *ngFor="let control of functions.controls; let i = index">
+     <input type="text"  [formControlName]="i"> 
+        </div>
+    </div>        
+    <label>Posición:</label><br />
+    <select formControlName="position">
+      <option [value]="item.id" *ngFor="let item of position">
+        {{ item.name }}
+      </option>
+    </select>
+    <label>
+        Estado
+    </label>
+    <select formControlName="status">
+        <option [value]="item.id" *ngFor="let item of status">
+          {{ item.name }}
+        </option>
+      </select>
+    <label>
+        Fecha de Inicio:
+    </label>
+    <input type="date" formControlName="start_date">
+    <label>
+        Fecha de Terminación:
+    </label>
+    <input type="date" formControlName="end_date">
+     </form>
+
+     <button type="button" (click)="guardar()">Guardar</button>
+
+ <!-- <pre>
+     {{authorities|json}}
+ </pre> -->
+

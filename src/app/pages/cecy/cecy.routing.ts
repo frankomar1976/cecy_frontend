@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-// import { AuthGuard } from '../../shared/guards/auth.guard';
+import { AuthorityComponent } from './authority/authority.component';
 
 
 
@@ -14,5 +14,8 @@ export const CecyRouting: Routes = [
                // canActivate: [AuthGuard]
             }
         ]
+    },{
+        path: 'pruebaAutority',
+        component: AuthorityComponent
     }
 ];

@@ -9,6 +9,7 @@ import { Authority } from 'src/app/models/cecy/authority';
 import { CecyHttpService } from 'src/app/services/cecy/cecy-http.service';
 import { Catalogue } from '../../../models/app/catalogue';
 import { User } from '../../../models/auth/user';
+import { Position } from '@angular/compiler';
 
 
 
@@ -20,83 +21,111 @@ import { User } from '../../../models/auth/user';
 
 export class AuthorityComponent implements OnInit {
 
-    flagAuthorities: boolean;
-    flagAuthority: boolean;
-    path?: string;
-    authorities: Authorities[];
-    formAuthority: FormGroup;
-    STORAGE_URL: string;
-    msgs: Message[];
-    paginator: Paginator;
 
     constructor( public messageService: MessageService,
                  private spinnerService: NgxSpinnerService,
                  private formBuilder: FormBuilder,
-                 private cecyHttpService: CecyHttpService,
-        )
-    {
-        this.paginator = {current_page: 1, per_page: 2};
-        this.authorities = [];
-    }
+                 private cecyHttpService: CecyHttpService,)
+        {
+        this.createForm();
+        this.cargarData();
+        this.getIdsCatalogue();
+        this.getauthorities();
+        }
 
-    resetPaginator(){
+    formulario: FormGroup;
+    position = [];
+    status = [];
+    authorities = [];
 
-    }
 
     ngOnInit(): void {
-        this.buildFormAuthority();
-        this.getAuthorities(this.paginator);
-        this.getAuthorities();
+
     }
 
+    get functionsField(){
+        return this.formulario.get('functions')as FormArray;
+    }
+    get startDateField(){
+        return this.formulario.get('start_date');
+    }
+    get endDateField(){
+        return this.formulario.get('end_date'); 
+    }
+    get userField(){
+        return this.formulario.get('user');
+    }
+    get positionField(){
+        return this.formulario.get('position');
+    }
+    get statusField(){
+        return this.formulario.get('status');
+    }
 
-    // authoriries del backend
-
-    getAuthority(){
-         // this.flagFormAuthority = true;
-        this.cecyHttpService.get(authorities).subscribe(response =>{
-          // this.flagFormAuthority = false;
-            this.formAuthority.patchValue(response['data']);
-
-        }, error => {
-            // this.flagFormAuthority = false;
-            this.messageService.error(error);
+    cargarData(){
+        this.formulario.reset({
+            user: 5,
+            position: this.formulario.value.position ,
+            status: this.formulario.value.status,
+           start_date: this.formulario.value.start_date,
+           end_date: this.formulario.value.end_date
+        });
+        [''].forEach((valor) => {
+            this.functions.push(this.formBuilder.control(valor));
         });
     }
 
-    /* getAuthorities(paginator: Paginator){
-        const params = new HttpParams()
-        .append('page', paginator.current_page.toString())
-        .append('per_page', paginator.per_page.toString());
+    get functions(){
+        return (this.formulario.get('functions') as FormArray)
+    }
 
-        this.flagAuthorities = true;
-        this.cecyHttpService.get('authorities', params).subscribe(
-            response => {
-                this.flagAuthorities = false;
-                this.authorities = response['data'];
-                this.paginator = response as Paginator;
-                console.log(response); */
-                /*this.messageService.success(response); en get no va */
-           /*  }, error => {
-                this.flagAuthorities = false;
-                this.messageService.error(error);
-            });
-    } */
-
-    // formulario de Authority
-    buildFormAuthority(){
-        this.formAuthority = this.formBuilder.group({
+    createForm(){
+        this.formulario = this.formBuilder.group({
             functions: this.formBuilder.array([
-                this.formBuilder.control(null, [Validators.required])
             ]),
-            start_date: [null, [Validators.required]],
-            end_date: [null, [Validators.required]],
-            user: [null, [Validators.required]],
-            position: [null, [Validators.required]],
-            status: [null, [Validators.required]]
+            user: ['' , [Validators.required]],
+            position: ['', [Validators.required]],
+            status: ['' , [Validators.required]],
+            start_date: ['' , [Validators.required]],
+            end_date: ['' , [Validators.required]],
+
         });
-      // console.log(this.formAuthority['']['']);
     }
 
+    guardar(){
+        console.log(this.formulario.value);
+        this.cecyHttpService.createAuthority({
+            "authority":{
+               "functions" : this.formulario.value.functions,
+                "start_date": this.formulario.value.start_date,
+                "end_date": this.formulario.value.end_date
+              },
+             "user":{
+                 "id": this.formulario.value.user
+                 },
+             "position": {
+                 "id": this.formulario.value.position
+             },
+             "status":{
+                 "id": this.formulario.value.status
+             }
+         }).subscribe(response => console.log(response));
+    }
+
+    getIdsCatalogue(){
+        this.cecyHttpService.getIdsCatalogue().subscribe((data: any) => {            
+            this.status = data.status;
+            this.position = data.position;
+        });
+        
+    }
+
+    getauthorities(){        
+        this.cecyHttpService.getauthorities().subscribe((data: any) => {
+            
+            this.authorities = data;
+        });
+        
+    }
 
 }
