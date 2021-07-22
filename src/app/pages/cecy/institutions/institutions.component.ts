@@ -12,14 +12,13 @@ import { User } from '../../../models/auth/user';
 import { Position } from '@angular/compiler';
 
 
-
 @Component({
-    selector: 'app-authority',
-    templateUrl: './authority.component.html',
-    styleUrls: ['./authority.component.scss']
+    selector: 'app-institutions',
+    templateUrl: './institutions.component.html',
+    styleUrls: ['./institutions.component.scss']
 })
 
-export class AuthorityComponent implements OnInit {
+export class InstitutionsComponent implements OnInit {
 
 
     constructor( public messageService: MessageService,
@@ -38,10 +37,6 @@ export class AuthorityComponent implements OnInit {
     position = []; 
     status = [];
     authorities = [];
- 
-
-
-
 
 
     ngOnInit(): void {
@@ -98,31 +93,21 @@ export class AuthorityComponent implements OnInit {
     }
 
     guardar(){
-        let diai = this.formulario.value.start_date.getDate();
-        let monthi = this.formulario.value.start_date.getMonth() + 1; // add 1 
-        let yeari = this.formulario.value.start_date.getFullYear();
-        let fechai = diai + '/'+monthi+'/' + yeari;
-
-        let diaf = this.formulario.value.start_date.getDate();
-        let monthf = this.formulario.value.start_date.getMonth() + 1; // add 1 
-        let yearf = this.formulario.value.start_date.getFullYear();
-        let fechaf = diaf + '/' + monthf + '/' + yearf;
-
-
+        console.log(this.formulario.value);
         this.cecyHttpService.createAuthority({
             "authority" : {
                "functions" : this.formulario.value.functions,
-                "start_date": fechai,
-                "end_date": fechaf
+                "start_date": this.formulario.value.start_date.slice(0, 10),
+                "end_date": this.formulario.value.end_date
               },
              "user":{
                  "id": this.autoridad.id
                  },
              "position": {
-                 "id": this.formulario.value.position.id
+                 "id": this.formulario.value.position[0].id
              },
              "status":{
-                 "id": this.formulario.value.status.id
+                 "id": this.formulario.value.status[0].id
              }
          }).subscribe(response => console.log(response));
     }

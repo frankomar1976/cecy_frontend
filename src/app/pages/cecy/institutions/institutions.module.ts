@@ -17,9 +17,9 @@ import {TableModule} from 'primeng/table';
 // My Components
 import {TooltipModule} from 'primeng/tooltip';
 import {DialogModule} from 'primeng/dialog';
-import { AuthorityRouting } from './authority.routing';
-import { AuthorityComponent } from './authority.component';
-import { AuthorityFormComponent } from './authority-form/authority-form.component';
+import { InstitutionsRouting } from './institutions.routing';
+import { InstitutionsComponent } from './institutions.component';
+// import { AuthorityFormComponent } from './authority-form/authority-form.component';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { AuthorityFormComponent } from './authority-form/authority-form.componen
         FormsModule,
         ReactiveFormsModule,
         InputTextModule,
-        RouterModule.forChild(AuthorityRouting),
+        RouterModule.forChild(InstitutionsRouting),
         ButtonModule,
         MessagesModule,
         MessageModule,
@@ -39,8 +39,8 @@ import { AuthorityFormComponent } from './authority-form/authority-form.componen
         TableModule,
     ],
 
-    declarations: [AuthorityComponent, AuthorityFormComponent],
+    declarations: [InstitutionsComponent, InstitutionsFormComponent],
     providers: [MessageService],
 })
-export class AuthorityModule {
+export class InstitutionsModule {
 }

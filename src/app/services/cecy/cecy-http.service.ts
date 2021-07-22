@@ -48,18 +48,20 @@ export class CecyHttpService {
           .append("Content-Type", "application/json")
           .append("Accept", "application/json");
           const body=JSON.stringify(data);
+          console.log(body);
+          
         return this. httpClient.post(url, body, { headers: this.headers });
       }
 
       getIdsCatalogue(){
         const url = environment.API_URL_CECY +"authority" + "/combo";
-        
+
         return this.httpClient.get(url);
       }
 
-      getauthorities(){
-        const url = environment.API_URL_CECY +"authority" + "/mostrar";
-        
+      getusuarios(){
+        const url = environment.API_URL_CECY +"user/getusers";
+
         return this.httpClient.get(url);
       }
 
