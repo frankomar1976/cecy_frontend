@@ -28,6 +28,7 @@ export class CecyHttpService {
 
     post(url: string, data: any, params = new HttpParams()) {
         url = environment.API_URL_CECY + url;
+        console.log(data);
         return this.httpClient.post(url, data, {params});
     }
 
@@ -48,8 +49,7 @@ export class CecyHttpService {
           .append("Content-Type", "application/json")
           .append("Accept", "application/json");
           const body=JSON.stringify(data);
-          console.log(body);
-          
+                    
         return this. httpClient.post(url, body, { headers: this.headers });
       }
 
@@ -65,6 +65,23 @@ export class CecyHttpService {
         return this.httpClient.get(url);
       }
 
+
+      getAutoridades(){
+        const url = environment.API_URL_CECY +"authorities";
+
+        return this.httpClient.get(url);
+      }
+
+      borrarAuthority(data: any) {
+        const url = environment.API_URL_CECY + "authority/delete";
+        this.headers = new HttpHeaders()
+          .set("X-Requested-With", "XMLHttpRequest")
+          .append("Content-Type", "application/json")
+          .append("Accept", "application/json");
+          const body=JSON.stringify(data);         
+          
+        return this. httpClient.put(url, body, { headers: this.headers });
+      }
 
 
 

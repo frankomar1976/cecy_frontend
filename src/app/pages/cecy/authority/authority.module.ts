@@ -13,6 +13,9 @@ import {MessageService} from 'primeng/api';
 import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {TableModule} from 'primeng/table';
+import {ToolbarModule} from 'primeng/toolbar';
+import {ToastModule} from 'primeng/toast';
+
 
 // My Components
 import {TooltipModule} from 'primeng/tooltip';
@@ -37,6 +40,8 @@ import { AuthorityFormComponent } from './authority-form/authority-form.componen
         DropdownModule,
         CalendarModule,
         TableModule,
+        ToolbarModule,
+        ToastModule
     ],
 
     declarations: [AuthorityComponent, AuthorityFormComponent],

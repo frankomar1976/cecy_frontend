@@ -1,69 +1,151 @@
+<div *ngIf="cambio">
+<p-toolbar>
+    <div class="p-toolbar-group-left">
+        <p-button label="Crear Autoridad" icon="pi pi-plus" (click)="crea()"></p-button>        
+    </div>    
+   
+</p-toolbar>
+<div class="card">
+    <h5>Autoridades</h5>
+    <p> </p>
+    <p-table [value]="authorities" selectionMode="single" [(selection)]="autoridad" dataKey="id" [paginator]="true" [rows]="6" [showCurrentPageReport]="true" 
+     [rowsPerPageOptions]="[10,25,50]">
 
- <center> <h1>Crear Autoridades</h1> </center>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Función</th>
+                <th>Estado</th>
+                <th>Posición</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Finalización</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-autoridad>
+            <tr [pSelectableRow]="autoridad">
+                                
+                    <td>{{autoridad.user.partial_name}}</td>
+                    <td>{{autoridad.functions}}</td>
+                    <td>{{autoridad.status.name}}</td>
+                    <td>{{autoridad.position.name}}</td>
+                    <td>{{autoridad.start_date}}</td>
+                    <td>{{autoridad.end_date}}</td>                
+                  
+                    <td>
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(autoridad)"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="showDelete(autoridad)"></button>
+                    </td>
+                </tr>            
+        </ng-template>
+    </p-table>
+</div> 
+</div> 
+<div *ngIf="!cambio">
+   
+ <center> <h2>{{valor}} Autoridades</h2> </center>
+
  <form autocomplete="off" [formGroup]="formulario" (ngSubmit)="guardar()">
 
- <div class="card">
-    <h5>Usuarios</h5>
+    <div class="p-fluid p-grid p-formgrid">
+    
+
+    <div class="p-field p-col-8 p-md-3" *ngIf="editar">
+        <label>Nombre</label>
+        <input type="text" pInputText [value]="nombre" [disabled]="true">  
+        
+</div>
+<div class="p-field p-col-8 p-md-3">
+    <label >
+        Funciones:
+    </label>     
+
+    <div formArrayName="functions">
+        <div *ngFor="let control of functions.controls; let i = index">
+    <input type="text" pInputText [formControlName]="i" > 
+       </div>
+   </div>    
+</div>
+   
+<div class="p-field p-col-8 p-md-3">
+        <label>Posición:</label><br />
+    <p-dropdown [options]="position" placeholder="seleccione" optionLabel="name" formControlName="position" [class.is-invalid]="posiciones" ></p-dropdown>  
+</div>
+   
+<div class="p-field p-col-8 p-md-3">
+        <label>
+        Estado:
+    </label>
+    <p-dropdown [options]="status" placeholder="seleccione" optionLabel="name" formControlName="status" [class.is-invalid]="estados"></p-dropdown>
+</div>
+<div class="p-field p-col-8 p-md-3">
+        <label>
+        Fecha Inicio Gestión:
+    </label>
+    <p-calendar dateFormat="dd/mm/yy" formControlName="start_date" [required]="true" ></p-calendar>
+</div>
+<div class="p-field p-col-8 p-md-3">
+       <label>
+        Fecha Fin de Gestión:
+    </label>
+    <p-calendar dateFormat="dd/mm/yy" formControlName="end_date" [required]="true"></p-calendar>
+</div>
+<div class="card"*ngIf="crear">
+
+    <h5>Seleccionar Usuario</h5>
     <p> </p>
-    <p-table [value]="authorities" selectionMode="single" [(selection)]="autoridad" dataKey="id">
+    <p-table [value]="usuarios" selectionMode="single" [(selection)]="usuario" dataKey="id" [paginator]="true" [rows]="6" [showCurrentPageReport]="true" 
+    [rowsPerPageOptions]="[10,25,50]">
         <ng-template pTemplate="header">
             <tr>
                 <th>Id</th>
                 <th>Nombre Completo</th>
-                <th>Identificacion</th>
+                <th>Identificación</th>
                 <th>Correo</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-auto>
-            <tr [pSelectableRow]="auto">
-                <td>{{auto.id}}</td>
-                <td>{{auto.full_name}}</td>
-                <td>{{auto.identification}}</td>
-                <td>{{auto.email}}</td>
+        <ng-template pTemplate="body" let-user>
+            <tr [pSelectableRow]="user">
+                <td>{{user.id}}</td>
+                <td>{{user.full_name}}</td>
+                <td>{{user.identification}}</td>
+                <td>{{user.email}}</td>
             </tr>
         </ng-template>
     </p-table>
-</div>   
-
-     <label >
-         Funciones:
-     </label>     
-
-     <div formArrayName="functions">
-         <div *ngFor="let control of functions.controls; let i = index">
-     <input type="text" pInputText [formControlName]="i"> 
-        </div>
-    </div>        
-    <label>Posición:</label><br />
-    <p-dropdown [options]="position" optionLabel="name" formControlName="position" ></p-dropdown>  
-
-    <label>
-        Estado
-    </label>
-    <p-dropdown [options]="status"  optionLabel="name" formControlName="status"></p-dropdown>
-    
-    <label>
-        Fecha de Inicio:
-    </label>
-    <p-calendar dateFormat="dd/mm/yy" formControlName="start_date"></p-calendar>
-    <label>
-        Fecha de Terminación:
-    </label>
-    <p-calendar dateFormat="dd/mm/yy" formControlName="end_date"></p-calendar>
+</div>   </div>
      </form>
+              
+        <button pButton type="button" label="Guardar" (click)="guardar()" icon="pi pi-check" pRipple ></button>
+        
+        <button pButton type="button" pRipple class="p-button-raised p-button-danger" label="cancelar" (click)="cancelar()" icon="pi pi-times"></button>  
+       
 
-     <span class="p-buttonset">
-        <button pButton type="button" label="Guardar" (click)="guardar()" icon="pi pi-check"></button>
-        <button pButton type="button" class="p-button-info" label="Borrar" icon="pi pi-trash"></button>
-        <button pButton type="button" class="p-button-danger" label="Eliminar" icon="pi pi-times"></button>
-    </span>
-
-    <!-- <button type="button" (click)="guardar()">Guardar</button> --> 
-
+</div>
+<p-toast position="center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1">
+            <div class="p-text-center">
+                <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+                <h4>{{message.summary}}</h4>
+                <p>{{message.detail}}</p>
+            </div>
+            <div class="p-grid p-fluid" *ngIf="!borrar">
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="guardar()" label="Si" class="p-button-success"></button>
+                </div>
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="onReject()" label="No" class="p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="p-grid p-fluid" *ngIf="borrar">
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="borrarAutoridad()" label="Si" class="p-button-success"></button>
+                </div>
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="onReject()" label="No" class="p-button-secondary"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>
     
-
-
-  <pre>
-     {{formulario.value|json}}
- </pre> 
-
